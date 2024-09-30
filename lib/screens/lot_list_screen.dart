@@ -3,21 +3,29 @@ import '../models/lot.dart';
 import '../widgets/lot_card.dart';
 import 'lot_detail_screen.dart';
 
-class LotListScreen extends StatelessWidget {
+class LotListScreen extends StatefulWidget {
+  const LotListScreen({super.key});
+
+  @override
+  _LotListScreenState createState() => _LotListScreenState();
+}
+
+class _LotListScreenState extends State<LotListScreen> {
   final List<Lot> lots = [
     Lot(
-        id: 1,
-        imageUrl:
-            'https://static.auction.ru/offer_images/rd48/2024/09/15/09/big/T/TxLg31KUKQ1/shvejnaja_mashina_tikka_s_instrukciej_finljandija_1958_g.jpg',
-        title: 'Швейная машина TIKKA, с инструкцией. Финляндия, 1958 г.',
-        description:
-            'Антикварная швейная машинка фирмы TIKKAKOSKI, производство Финлядия 1958 года. Состояние рабочее. Инструкция пользования. В наличии оригиналы: шпульки, иглы, кисточка, отвертка.',
-        currency: '₽',
-        initialPrice: 2500,
-        currentPrice: 2500,
-        startDate: DateTime.now(),
-        endDate: DateTime.now().add(Duration(days: 14)),
-        owner: 'Tait'),
+      id: 1,
+      imageUrl:
+          'https://static.auction.ru/offer_images/rd48/2024/09/15/09/big/T/TxLg31KUKQ1/shvejnaja_mashina_tikka_s_instrukciej_finljandija_1958_g.jpg',
+      title: 'Швейная машина TIKKA, с инструкцией. Финляндия, 1958 г.',
+      description:
+          'Антикварная швейная машинка фирмы TIKKAKOSKI, производство Финлядия 1958 года. Состояние рабочее. Инструкция пользования. В наличии оригиналы: шпульки, иглы, кисточка, отвертка.',
+      currency: '₽',
+      initialPrice: 2500,
+      currentPrice: 2500,
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(const Duration(days: 14)),
+      owner: 'Tait',
+    ),
     Lot(
       id: 2,
       imageUrl:
@@ -30,7 +38,7 @@ class LotListScreen extends StatelessWidget {
       initialPrice: 1300,
       currentPrice: 1400,
       startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(days: 14)),
+      endDate: DateTime.now().add(const Duration(days: 14)),
       owner: 'zolotou',
     ),
     Lot(
@@ -44,12 +52,122 @@ class LotListScreen extends StatelessWidget {
       initialPrice: 25000000,
       currentPrice: 25000000,
       startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(days: 7)),
+      endDate: DateTime.now().add(const Duration(days: 7)),
       owner: 'client_9afba8ea6e',
     ),
   ];
 
-  LotListScreen({super.key});
+  void _addLot() {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    final currentPriceController = TextEditingController();
+    final ownerController = TextEditingController();
+    final initialPriceController = TextEditingController();
+    final imageUrlController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Добавить лот'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: 'Название'),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: 'Описание'),
+                ),
+                TextField(
+                  controller: currentPriceController,
+                  decoration: const InputDecoration(labelText: 'Текущая цена'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: ownerController,
+                  decoration: const InputDecoration(labelText: 'Владелец'),
+                ),
+                TextField(
+                  controller: initialPriceController,
+                  decoration:
+                      const InputDecoration(labelText: 'Начальная цена'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: imageUrlController,
+                  decoration:
+                      const InputDecoration(labelText: 'Ссылка на изображение'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Отменить'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  lots.add(
+                    Lot(
+                      id: lots.length + 1,
+                      title: titleController.text,
+                      description: descriptionController.text,
+                      currentPrice: double.parse(currentPriceController.text),
+                      startDate: DateTime.now(),
+                      endDate: DateTime.now().add(const Duration(days: 14)),
+                      owner: ownerController.text,
+                      initialPrice: double.parse(initialPriceController.text),
+                      imageUrl: imageUrlController.text,
+                      currency: '₽',
+                    ),
+                  );
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Добавить'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _removeLot(int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Подтвердите удаление'),
+          content: const Text('Вы уверены, что хотите удалить лот?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Отменить'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  lots.removeAt(index);
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('Удалить'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +177,12 @@ class LotListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Лоты'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _addLot,
+          ),
+        ],
       ),
       body: SizedBox(
         height: listHeight,
@@ -76,7 +200,10 @@ class LotListScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: LotCard(lot: lots[index]),
+                  child: LotCard(
+                    lot: lots[index],
+                    onDelete: () => _removeLot(index),
+                  ),
                 ),
                 const SizedBox(height: 16.0),
               ],
