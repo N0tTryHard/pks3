@@ -9,6 +9,7 @@ class Lot {
   final DateTime startDate;
   final DateTime endDate;
   final String owner;
+  bool isFavorite;
 
   Lot({
     required this.id,
@@ -21,5 +22,6 @@ class Lot {
     required this.startDate,
     required this.endDate,
     required this.owner,
+    this.isFavorite = false,
   });
 }
