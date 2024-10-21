@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -8,6 +9,19 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Профиль'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditProfileScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: const Padding(
         padding: EdgeInsets.all(16.0),
@@ -17,20 +31,29 @@ class ProfileScreen extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage:
-                    NetworkImage('https://via.placeholder.com/150'),
+                backgroundImage: NetworkImage('https://via.placeholder.com/150'),
               ),
             ),
             SizedBox(height: 16.0),
-            Text('ФИО: Юртеев Алексей Игоревич',
-                style: TextStyle(fontSize: 18)),
+            Text(
+              'ФИО: Юртеев Алексей Игоревич',
+              style: TextStyle(fontSize: 18),
+            ),
             SizedBox(height: 8.0),
-            Text('Группа: ЭФБО-03-22', style: TextStyle(fontSize: 18)),
+            Text(
+              'Группа: ЭФБО-03-22',
+              style: TextStyle(fontSize: 18),
+            ),
             SizedBox(height: 8.0),
-            Text('Номер телефона: +7 (777) 777-77-77',
-                style: TextStyle(fontSize: 18)),
+            Text(
+              'Номер телефона: +7 (777) 777-77-77',
+              style: TextStyle(fontSize: 18),
+            ),
             SizedBox(height: 8.0),
-            Text('Почта: yurteev@example.com', style: TextStyle(fontSize: 18)),
+            Text(
+              'Почта: yurteev@example.com',
+              style: TextStyle(fontSize: 18),
+            ),
           ],
         ),
       ),
