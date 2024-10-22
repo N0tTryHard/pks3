@@ -32,8 +32,9 @@ class LotCard extends StatelessWidget {
                     : lot.title,
                 style:
                     const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+            const Spacer(),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.bottomRight,
               child: IconButton(
                 icon: Icon(
                   lot.isFavorite ? Icons.favorite : Icons.favorite_border,
